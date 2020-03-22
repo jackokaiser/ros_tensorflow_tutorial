@@ -22,9 +22,8 @@ Running
 -----
 
 1. Run the node: `rosrun ros_tensorflow node.py`
-Predictions are performed at regular time interval in a loop.
-
-2. Train the Tensorflow model (use tab completion):
+3. Predictions are performed at regular time interval in a loop
+4. Train the Tensorflow model (use tab completion):
 ```bash
 rostopic pub /train/goal ros_tensorflow_msgs/TrainActionGoal "header:
   seq: 0
@@ -41,7 +40,7 @@ goal:
   epochs: 10"
 ```
 
-3. Abort training (use tab completion):
+5. Abort training (use tab completion):
 ```bash
 rostopic pub /train/cancel actionlib_msgs/GoalID "stamp:
   secs: 0
@@ -49,7 +48,7 @@ rostopic pub /train/cancel actionlib_msgs/GoalID "stamp:
 id: ''"
 ```
 
-4. Run predicitons from a service call (use tab completion):
+6. Run predicitons from a service call (use tab completion):
 ```bash
 rosservice call /predict "data: [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.]"
 ```

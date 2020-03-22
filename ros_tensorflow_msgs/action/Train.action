@@ -1,0 +1,9 @@
+#goal definition
+int32 epochs
+---
+#result definition
+---
+#feedback
+int32 i_epoch
+float64 loss
+float64 acc

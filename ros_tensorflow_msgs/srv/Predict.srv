@@ -1,0 +1,5 @@
+float64[] data
+---
+# response definition
+int32 i_class
+float64 confidence

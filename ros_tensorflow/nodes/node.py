@@ -29,8 +29,12 @@ class RosInterface():
             # our hidden parameters are the mean and scale of a gaussian distribution
             self.fake_hidden_params[i_class] = np.random.rand(2)
         y = np.ones(n_samples) * i_class
-        y[i_class] = 1.
-        return np.random.normal(*self.fake_hidden_params[i_class], size=(n_samples, self.input_dim)), y
+
+        # the data consits of histograms from the class distribution
+        n_draw_per_sample = 20
+        samples = np.random.normal(*self.fake_hidden_params[i_class], size=(n_samples, n_draw_per_sample))
+        x = np.array([ np.histogram(s, bins=self.input_dim, range=[-1, 2])[0] for s in samples ])
+        return x, y
 
     def make_synthetic_dataset(self, n_samples_per_class):
         x1, y1 = self.make_samples(i_class=0, n_samples=n_samples_per_class)
@@ -77,11 +81,12 @@ def main():
     rospy.loginfo("ros_tensorflow node initialized")
     rate = rospy.Rate(0.5)
     while not rospy.is_shutdown():
-        test_class = 0
-        x, _ = ri.make_samples(i_class=test_class, n_samples=1)
-        y, confidence = ri.wrapped_model.predict(x.reshape(1, -1))
-        rospy.loginfo("Prediction from loop: class {} was successfully predicted: {} (confidence: {})"\
-                      .format(test_class, y==test_class, confidence))
+        rospy.loginfo("Prediction from loop:")
+        for test_class in range(2):
+            x, _ = ri.make_samples(i_class=test_class, n_samples=1)
+            y, confidence = ri.wrapped_model.predict(x.reshape(1, -1))
+            rospy.loginfo("\tclass {} was successfully predicted: {} (confidence: {})"\
+                          .format(test_class, y==test_class, confidence))
 
         rate.sleep()
 
